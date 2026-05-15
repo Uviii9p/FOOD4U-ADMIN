@@ -9,12 +9,12 @@ const Navbar = () => {
   const { cartCount } = useCart();
 
   const links = [
-    { name: 'Home', path: '/' },
-    { name: 'About Us', path: '/about' },
-    { name: 'Categories', path: '/categories' },
-    { name: 'Store', path: '/items' },
-    { name: 'Gallery', path: '/gallery' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Home', path: '/shop' },
+    { name: 'About Us', path: '/shop/about' },
+    { name: 'Categories', path: '/shop/categories' },
+    { name: 'Store', path: '/shop/items' },
+    { name: 'Gallery', path: '/shop/gallery' },
+    { name: 'Contact', path: '/shop/contact' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -24,7 +24,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2 group">
+            <Link to="/shop" className="flex items-center space-x-2 group">
               <div className="bg-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
                 <Utensils className="h-7 w-7 text-accent" />
               </div>
@@ -45,7 +45,7 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link to="/cart" className="relative p-2 bg-gray-50 rounded-full hover:bg-accent/10 transition-colors group">
+            <Link to="/shop/cart" className="relative p-2 bg-gray-50 rounded-full hover:bg-accent/10 transition-colors group">
                 <ShoppingCart className="w-6 h-6 text-gray-600 group-hover:text-accent" />
                 {cartCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-accent text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white animate-bounce">
@@ -57,7 +57,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
-            <Link to="/cart" className="relative p-2">
+            <Link to="/shop/cart" className="relative p-2">
                 <ShoppingCart className="w-6 h-6 text-gray-600" />
                 {cartCount > 0 && (
                     <span className="absolute top-0 right-0 bg-accent text-white text-[10px] font-black w-4 h-4 flex items-center justify-center rounded-full animate-bounce">
