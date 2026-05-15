@@ -48,16 +48,20 @@ function App() {
       <Router>
         <ToastContainer position="bottom-right" />
         <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="categories" element={<Categories />} />
-          <Route path="items" element={<Items />} />
-          <Route path="gallery" element={<Gallery />} />
-          <Route path="offers" element={<Offers />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="cart" element={<Cart />} />
-        </Route>
+          {/* Default Redirect to Admin Login */}
+          <Route path="/" element={<Navigate to="/admin/login" replace />} />
+
+          {/* Storefront moved to /shop */}
+          <Route path="/shop" element={<MainLayout />}>
+            <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
+            <Route path="categories" element={<Categories />} />
+            <Route path="items" element={<Items />} />
+            <Route path="gallery" element={<Gallery />} />
+            <Route path="offers" element={<Offers />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="cart" element={<Cart />} />
+          </Route>
 
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin" element={
