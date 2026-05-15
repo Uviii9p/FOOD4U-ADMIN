@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import api from '../../utils/api';
 import { Plus, Edit2, Trash2, Package, IndianRupee, Eye, EyeOff, Image as ImageIcon, Search, AlertCircle, TrendingUp, FileDown } from 'lucide-react';
+import { getImageUrl } from '../../utils/urlHelper';
 import { AuthContext } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 
@@ -227,7 +228,7 @@ const ManageItems = () => {
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-4">
                       <div className="w-14 h-14 rounded-2xl overflow-hidden bg-gray-100 border border-gray-100 flex-shrink-0">
-                        {item.image && <img src={`http://localhost:5001${item.image}`} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />}
+                        {item.image && <img src={getImageUrl(item.image)} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />}
                       </div>
                       <div>
                         <div className="font-bold text-gray-800">{item.name}</div>

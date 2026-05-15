@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
+import { getImageUrl } from '../../utils/urlHelper';
 import { toast } from 'react-toastify';
 
 const ManageCategories = () => {
@@ -94,7 +95,7 @@ const ManageCategories = () => {
             {categories.map((category) => (
               <tr key={category._id} className="border-b border-gray-50 hover:bg-gray-50">
                 <td className="px-6 py-4">
-                  <img src={`http://localhost:5001${category.image}`} alt={category.name} className="w-12 h-12 rounded object-cover" />
+                  <img src={getImageUrl(category.image)} alt={category.name} className="w-12 h-12 rounded object-cover" />
                 </td>
                 <td className="px-6 py-4 font-medium text-gray-800">{category.name}</td>
                 <td className="px-6 py-4 text-gray-600 truncate max-w-xs">{category.description}</td>

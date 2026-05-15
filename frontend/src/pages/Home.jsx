@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShoppingBag, ShieldCheck, Clock, MapPin, Search } from 'lucide-react';
 import api from '../utils/api';
+import { getImageUrl } from '../utils/urlHelper';
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
@@ -102,7 +103,7 @@ const Home = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {categories.map(category => (
               <div key={category._id} className="group relative rounded-2xl overflow-hidden shadow-lg h-80">
-                <img src={`http://localhost:5001${category.image}`} alt={category.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <img src={getImageUrl(category.image)} alt={category.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
                 <div className="absolute bottom-0 left-0 p-6">
                   <h3 className="text-2xl font-bold text-white mb-2">{category.name}</h3>

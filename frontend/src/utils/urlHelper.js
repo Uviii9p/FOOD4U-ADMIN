@@ -21,3 +21,13 @@ export const extractImageUrl = (url) => {
   
   return url;
 };
+export const getImageUrl = (imagePath) => {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http')) return imagePath;
+  
+  const baseUrl = import.meta.env.VITE_API_URL 
+    ? import.meta.env.VITE_API_URL.replace('/api', '') 
+    : 'http://localhost:5001';
+    
+  return `${baseUrl}${imagePath}`;
+};

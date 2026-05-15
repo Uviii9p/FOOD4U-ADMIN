@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { ShoppingCart, Search, Filter, IndianRupee, Package, ArrowRight } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
+import { getImageUrl } from '../utils/urlHelper';
 
 const Items = () => {
   const [items, setItems] = useState([]);
@@ -97,7 +98,7 @@ const Items = () => {
               <div key={item._id} className="group bg-white rounded-[2.5rem] p-6 shadow-sm hover:shadow-2xl hover:shadow-accent/10 transition-all duration-700 border border-transparent hover:border-accent/10 relative">
                 <div className="h-64 overflow-hidden relative">
                   <img 
-                    src={item.image?.startsWith('http') ? item.image : `http://localhost:5001${item.image}`} 
+                    src={getImageUrl(item.image)} 
                     alt={item.name} 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                   />
