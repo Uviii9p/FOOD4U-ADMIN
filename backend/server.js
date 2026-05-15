@@ -45,15 +45,17 @@ const connectDB = async () => {
     } catch (err) {
         console.log('Local MongoDB not found or timed out. Attempting in-memory MongoDB...');
         try {
-            const { MongoMemoryServer } = require('mongodb-memory-server');
-            const mongoServer = await MongoMemoryServer.create();
-            const mongoUri = mongoServer.getUri();
-            await mongoose.connect(mongoUri);
-            console.log('In-memory MongoDB Connected!');
+            const MMS = require('mongodb-memory-server');
+            if (MMS && MMS.MongoMemoryServer) {
+                const mongoServer = await MMS.MongoMemoryServer.create();
+                const mongoUri = mongoServer.getUri();
+                await mongoose.connect(mongoUri);
+                console.log('In-memory MongoDB Connected!');
+            } else {
+                throw new Error('Module loaded but missing MongoMemoryServer class');
+            }
         } catch (memErr) {
-            console.error('Failed to start in-memory MongoDB:', memErr.message);
-            console.log('Running in MOCK MODE (No database connection)');
-            // We can still start the server, but DB calls will fail unless we mock them.
+            console.log('Running in MOCK MODE (Database is offline)');
         }
         
         // Auto-seed for demonstration
