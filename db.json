@@ -1,0 +1,41 @@
+{
+  "adminHash": "$2b$08$coIlR0btLsYlgVxV84qEhujb8UcmpCIo8E5BvUlNbNpc3qJRtVvB6",
+  "gallery": [
+    {
+      "id": "img-1778006175728",
+      "url": "/assets/uploads/1778006175717-ChatGPT Image Apr 19, 2026, 05_27_47 PM.png",
+      "filename": "1778006175717-ChatGPT Image Apr 19, 2026, 05_27_47 PM.png"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat-1",
+      "name": "Fresh Groceries",
+      "desc": "Farm-fresh produce"
+    },
+    {
+      "id": "cat-2",
+      "name": "Fashion & Apparel",
+      "desc": "Trending clothing"
+    }
+  ],
+  "offers": [],
+  "messages": [
+    {
+      "id": "msg-1",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "message": "Do you have vegan options?",
+      "read": false
+    }
+  ],
+  "settings": {
+    "storeName": "Lumina Retail",
+    "address": "123 Premium Retail Boulevard, Metropolis City, 10001",
+    "phone": "+1 (555) 123-4567",
+    "email": "hello@luminaretail.com",
+    "hours": "Mon - Sun: 9:00 AM - 10:00 PM",
+    "tagline": "Experience Shopping Like Never Before",
+    "intro": "Welcome to Lumina Retail, your ultimate destination for high-quality groceries..."
+  }
+}
