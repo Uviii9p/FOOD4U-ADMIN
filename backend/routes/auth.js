@@ -26,23 +26,27 @@ router.get('/setup', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
     const { code, role } = req.body;
+    const cleanCode = code ? code.toString().trim() : '';
+    const cleanRole = role ? role.toLowerCase() : '';
+
     try {
         let user;
         
         // ADMIN CODE: 123
-        if (role === 'admin' && code === '123') {
+        if (cleanRole === 'admin' && cleanCode === '123') {
             user = await Admin.findOne({ email: 'admin@sujalfoodshop.com' }).catch(() => null);
             if (!user) {
                 user = { id: 'demo-admin', _id: 'demo-admin', email: 'admin@sujalfoodshop.com', name: 'Sujal (Admin)' };
             }
         } 
         // VENDOR CODE: ABC
-        else if (role === 'vendor' && code === 'ABC') {
+        else if (cleanRole === 'vendor' && cleanCode === 'ABC') {
             user = await Vendor.findOne({ email: 'vendor@sujalfoodshop.com' }).catch(() => null);
             if (!user) {
                 user = { id: 'demo-vendor', _id: 'demo-vendor', email: 'vendor@sujalfoodshop.com', name: 'Fresh Farms (Vendor)' };
             }
         } else {
+            console.log(`Verification failed for role: ${cleanRole}, code: ${cleanCode}`);
             return res.status(400).json({ msg: 'Invalid Access Code' });
         }
 
