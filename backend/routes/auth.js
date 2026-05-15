@@ -25,30 +25,25 @@ router.get('/setup', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
-    const { email, password, role } = req.body;
+    const { code, role } = req.body;
     try {
         let user;
-        if (role === 'admin') {
-            user = await Admin.findOne({ email }).catch(() => null);
-        } else {
-            user = await Vendor.findOne({ email }).catch(() => null);
-        }
-
-        if (!user) {
-            // DEMO FALLBACK: Allow login even if database seeding failed
-            if (email === 'admin@sujalfoodshop.com' && password === 'admin123' && role === 'admin') {
-                user = { id: 'demo-admin', _id: 'demo-admin', email, password: 'mock', name: 'Sujal (Admin)' };
-            } else if (email === 'vendor@sujalfoodshop.com' && password === 'vendor123' && role === 'vendor') {
-                user = { id: 'demo-vendor', _id: 'demo-vendor', email, password: 'mock', name: 'Fresh Farms (Vendor)' };
-            } else {
-                return res.status(400).json({ msg: 'Invalid Credentials' });
+        
+        // ADMIN CODE: 123
+        if (role === 'admin' && code === '123') {
+            user = await Admin.findOne({ email: 'admin@sujalfoodshop.com' }).catch(() => null);
+            if (!user) {
+                user = { id: 'demo-admin', _id: 'demo-admin', email: 'admin@sujalfoodshop.com', name: 'Sujal (Admin)' };
             }
-        }
-
-        // Check password
-        if (user.password !== 'mock') {
-            const isMatch = await bcrypt.compare(password, user.password);
-            if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
+        } 
+        // VENDOR CODE: ABC
+        else if (role === 'vendor' && code === 'ABC') {
+            user = await Vendor.findOne({ email: 'vendor@sujalfoodshop.com' }).catch(() => null);
+            if (!user) {
+                user = { id: 'demo-vendor', _id: 'demo-vendor', email: 'vendor@sujalfoodshop.com', name: 'Fresh Farms (Vendor)' };
+            }
+        } else {
+            return res.status(400).json({ msg: 'Invalid Access Code' });
         }
 
         const payload = { user: { id: user.id || user._id, role: role } };
@@ -68,7 +63,7 @@ router.post('/login', async (req, res) => {
         });
     } catch (err) {
         console.error('Login Error:', err);
-        res.status(500).json({ msg: 'Server Error during login', error: err.message });
+        res.status(500).json({ msg: 'Server Error during verification', error: err.message });
     }
 });
 

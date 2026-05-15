@@ -6,8 +6,7 @@ import api from '../../utils/api';
 import { User, Lock, ArrowRight, ShieldCheck, ShoppingBag } from 'lucide-react';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [accessCode, setAccessCode] = useState('');
   const [role, setRole] = useState('admin'); // 'admin' or 'vendor'
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -15,7 +14,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await login(email, password, role);
+      // Use accessCode for both email/password fields in the backend for simplicity, 
+      // or update the backend to accept a code. I will update the backend to accept 'code'.
+      const user = await login(accessCode, role);
       toast.success(`Welcome back, ${user.name}!`);
       if (role === 'vendor') {
         navigate('/admin/items');
@@ -23,7 +24,7 @@ const Login = () => {
         navigate('/admin');
       }
     } catch (err) {
-      toast.error(err.response?.data?.msg || 'Login failed');
+      toast.error(err.response?.data?.msg || 'Invalid access code');
     }
   };
 
@@ -40,7 +41,7 @@ const Login = () => {
               <ShieldCheck className="text-white w-10 h-10" />
             </div>
             <h1 className="text-4xl font-black text-white mb-2 tracking-tight">Access Hub</h1>
-            <p className="text-slate-400 font-medium tracking-wide uppercase text-[10px]">Secure Gateway for Sujal Food Shop</p>
+            <p className="text-slate-400 font-medium tracking-wide uppercase text-[10px]">Secure Code Verification for Sujal Food Shop</p>
           </div>
 
           {/* Role Switcher */}
@@ -67,27 +68,13 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="group">
               <div className="relative">
-                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-accent transition-colors duration-300" size={18} />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-800/30 border border-white/5 text-white pl-14 pr-6 py-5 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent/50 transition-all placeholder:text-slate-600 font-medium"
-                  placeholder="Email Address"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="group">
-              <div className="relative">
                 <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-accent transition-colors duration-300" size={18} />
                 <input
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-800/30 border border-white/5 text-white pl-14 pr-6 py-5 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent/50 transition-all placeholder:text-slate-600"
-                  placeholder="Password"
+                  value={accessCode}
+                  onChange={(e) => setAccessCode(e.target.value)}
+                  className="w-full bg-slate-800/30 border border-white/5 text-white pl-14 pr-6 py-5 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent/50 transition-all placeholder:text-slate-600 font-black tracking-[0.5em] text-center"
+                  placeholder="ENTER ACCESS CODE"
                   required
                 />
               </div>
@@ -98,15 +85,15 @@ const Login = () => {
               className="w-full group relative bg-white text-slate-950 font-black uppercase tracking-[0.2em] text-xs py-5 rounded-[1.5rem] overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] active:scale-95"
             >
               <span className="relative z-10 flex items-center justify-center">
-                Initialize Session
+                Verify Identity
                 <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
               </span>
             </button>
           </form>
 
           <div className="mt-10 pt-8 border-t border-white/5 flex justify-between items-center px-2">
-             <button className="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-wider transition-colors">Emergency Reset</button>
-             <button className="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-wider transition-colors">Support Node</button>
+             <button className="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-wider transition-colors">Emergency Protocol</button>
+             <button className="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-wider transition-colors">System Diagnostics</button>
           </div>
         </div>
 
