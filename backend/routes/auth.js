@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
+const Vendor = require('../models/Vendor');
 const auth = require('../middleware/authMiddleware');
 
 // Setup default admin if none exists
@@ -14,9 +15,9 @@ router.get('/setup', async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash('admin123', salt);
         
-        const admin = new Admin({ email: 'admin@store.com', password: hashedPassword });
+        const admin = new Admin({ email: 'admin@sujalfoodshop.com', password: hashedPassword });
         await admin.save();
-        res.json({ msg: 'Default admin created: admin@store.com / admin123' });
+        res.json({ msg: 'Default admin created: admin@sujalfoodshop.com / admin123' });
     } catch (err) {
         res.status(500).send('Server Error');
     }
@@ -25,44 +26,40 @@ router.get('/setup', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
     const { email, password, role } = req.body;
-    console.log(`Login attempt: ${email} as ${role}`);
     try {
         let user;
         if (role === 'admin') {
-            user = await Admin.findOne({ email });
+            user = await Admin.findOne({ email }).catch(() => null);
         } else {
-            const Vendor = require('../models/Vendor');
-            user = await Vendor.findOne({ email });
+            user = await Vendor.findOne({ email }).catch(() => null);
         }
 
         if (!user) {
             // DEMO FALLBACK: Allow login even if database seeding failed
             if (email === 'admin@sujalfoodshop.com' && password === 'admin123' && role === 'admin') {
-                user = { id: 'demo-admin', email, password: 'mock', name: 'Sujal (Admin)' };
+                user = { id: 'demo-admin', _id: 'demo-admin', email, password: 'mock', name: 'Sujal (Admin)' };
             } else if (email === 'vendor@sujalfoodshop.com' && password === 'vendor123' && role === 'vendor') {
-                user = { id: 'demo-vendor', email, password: 'mock', name: 'Fresh Farms (Vendor)' };
+                user = { id: 'demo-vendor', _id: 'demo-vendor', email, password: 'mock', name: 'Fresh Farms (Vendor)' };
             } else {
-                console.log(`User not found: ${email}`);
                 return res.status(400).json({ msg: 'Invalid Credentials' });
             }
         }
 
-        // Only check password match if it's not a mock user
+        // Check password
         if (user.password !== 'mock') {
             const isMatch = await bcrypt.compare(password, user.password);
-            if (!isMatch) {
-                console.log(`Password mismatch for: ${email}`);
-                return res.status(400).json({ msg: 'Invalid Credentials' });
-            }
+            if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
         }
 
-        const payload = { user: { id: user.id, role: role } };
-        jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '5d' }, (err, token) => {
-            if (err) throw err;
+        const payload = { user: { id: user.id || user._id, role: role } };
+        const secret = process.env.JWT_SECRET || 'secret';
+        
+        jwt.sign(payload, secret, { expiresIn: '5d' }, (err, token) => {
+            if (err) return res.status(500).json({ msg: 'JWT Sign Error', error: err.message });
             res.json({ 
                 token, 
                 admin: { 
-                    id: user.id, 
+                    id: user.id || user._id, 
                     email: user.email, 
                     role: role, 
                     name: role === 'admin' ? 'Administrator' : user.name 
@@ -70,7 +67,8 @@ router.post('/login', async (req, res) => {
             });
         });
     } catch (err) {
-        res.status(500).send('Server Error');
+        console.error('Login Error:', err);
+        res.status(500).json({ msg: 'Server Error during login', error: err.message });
     }
 });
 
