@@ -110,6 +110,8 @@ const connectDB = async () => {
             ]);
             console.log('Seeding complete.');
         }
+    } catch (seedErr) {
+        console.log('Seeding skipped or failed:', seedErr.message);
     }
 };
 connectDB();
