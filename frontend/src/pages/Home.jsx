@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShoppingBag, ShieldCheck, Clock, MapPin, Search } from 'lucide-react';
+import { ArrowRight, ShoppingBag, ShieldCheck, Clock, Search } from 'lucide-react';
 import api from '../utils/api';
 import { getImageUrl } from '../utils/urlHelper';
 
@@ -153,14 +153,6 @@ const Home = () => {
             {homeContent?.ctaSubtitle || "Visit our store today and discover a world of quality products."}
           </p>
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-            <a 
-              href={settings?.mapsLink || "#"} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="px-12 py-5 bg-accent text-white font-black rounded-[2rem] hover:bg-emerald-600 transition-all flex items-center shadow-2xl shadow-accent/30"
-            >
-              <MapPin className="mr-2" /> Get Directions
-            </a>
             <a 
               href={`tel:${settings?.phone || "+919876543210"}`} 
               className="px-12 py-5 bg-white border-4 border-primary text-primary font-black rounded-[2rem] hover:bg-primary hover:text-white transition-all flex items-center shadow-lg shadow-primary/10"
