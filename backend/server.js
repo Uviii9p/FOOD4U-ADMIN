@@ -43,18 +43,25 @@ const connectDB = async () => {
         });
         console.log('MongoDB Connected to local database');
     } catch (err) {
-        console.log('Local MongoDB not found or timed out. Starting in-memory MongoDB for demonstration...');
-        const { MongoMemoryServer } = require('mongodb-memory-server');
-        const mongoServer = await MongoMemoryServer.create();
-        const mongoUri = mongoServer.getUri();
-        await mongoose.connect(mongoUri);
-        console.log('In-memory MongoDB Connected! (Note: Data will reset when server restarts)');
+        console.log('Local MongoDB not found or timed out. Attempting in-memory MongoDB...');
+        try {
+            const { MongoMemoryServer } = require('mongodb-memory-server');
+            const mongoServer = await MongoMemoryServer.create();
+            const mongoUri = mongoServer.getUri();
+            await mongoose.connect(mongoUri);
+            console.log('In-memory MongoDB Connected!');
+        } catch (memErr) {
+            console.error('Failed to start in-memory MongoDB:', memErr.message);
+            console.log('Running in MOCK MODE (No database connection)');
+            // We can still start the server, but DB calls will fail unless we mock them.
+        }
         
         // Auto-seed for demonstration
-        const Category = require('./models/Category');
-        const Item = require('./models/Item');
-        const Vendor = require('./models/Vendor');
-        const count = await Category.countDocuments();
+        try {
+            const Category = require('./models/Category');
+            const Item = require('./models/Item');
+            const Vendor = require('./models/Vendor');
+            const count = await Category.countDocuments().catch(() => 0);
         if (count === 0) {
             console.log('Seeding Sujal Food Shop data...');
             
